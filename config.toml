@@ -4,6 +4,9 @@ title = "Iqbal Ansari"
 
 theme = "hugo-kiera"
 
+menu = "main"
+meta = "true"
+
 pygmentsCodeFences = true
 disqusShortname = "iqbalansari"
 
