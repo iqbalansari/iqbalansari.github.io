@@ -1,0 +1,248 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>Iqbal Ansari</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="[Iqbal]" /><meta property="og:title" content="Switching repositories with Magit" />
+<meta property="og:description" content="Magit is an awesome git interface for emacs. The normal workflow with magit is to do M-xmagit-status, if the file you are editing is in a git repository you will have magit UI opened allowing you interact with the git repo. Otherwise it will ask you to enter the path to a git repository and opens a magit UI for that repository.
+It often happens that you are editing a file in a some git repository but want to open the magit UI for some other git repository." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/" />
+<meta property="article:published_time" content="2014-02-22T21:49:00+05:30" />
+<meta property="article:modified_time" content="2014-02-22T21:49:00+05:30" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Switching repositories with Magit"/>
+<meta name="twitter:description" content="Magit is an awesome git interface for emacs. The normal workflow with magit is to do M-xmagit-status, if the file you are editing is in a git repository you will have magit UI opened allowing you interact with the git repo. Otherwise it will ask you to enter the path to a git repository and opens a magit UI for that repository.
+It often happens that you are editing a file in a some git repository but want to open the magit UI for some other git repository."/>
+
+<meta name="generator" content="Hugo 0.62.0" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="http://iqbalansari.me/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Iqbal Ansari</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/iqbalansari" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/_iqbalansari" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://linkedin.com/in/iqbalansari02" title="LinkedIn">
+               <i class="fab fa-linkedin fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://stackoverflow.com/users/5285712/iqbal-ansari" title="StackOverflow">
+               <i class="fab fa-stack-overflow fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>My little corner on the Internet</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Switching repositories with Magit</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2014-02-22T21:49:00&#43;05:30">Feb 22, 2014</time>
+        </li>
+        
+        <li>
+            Categories:
+            <em>
+                
+                    
+                    <a href="/categories/magit">magit</a>
+                
+                    , 
+                    <a href="/categories/emacs">emacs</a>
+                
+            </em>
+        </li>
+        
+
+        
+
+        <li>3 minutes read</li>
+    </ul>
+</aside>
+
+    
+
+    <p><a href="https://github.com/magit/magit">Magit</a> is an awesome git interface for emacs. The normal workflow with magit is
+to do <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code>, if the file you are editing is in a git
+repository you will have magit UI opened allowing you interact with the git
+repo. Otherwise it will ask you to enter the path to a git repository and
+opens a magit UI for that repository.</p>
+<p>It often happens that you are editing a file in a some git repository but want
+to open the magit UI for some other git repository. You can of course open a
+file from the other repository and do <code>magit-status</code>, but there should be a
+better way to do so. And as with most things in Emacs, there <strong>is</strong> a better
+way. If you call <code>magit-status</code> with a prefix argument, it will prompt you for
+path to the git repository you want to switch to and open a magit UI associated
+with that repository.</p>
+<p>This is well and good but you still have to enter the path to repository, this
+little improvement over opening a file and then calling <code>magit-status</code>. We can
+improve the this further by using the variable <code>magit-repo-dirs</code>. Basically
+you can set this variable to a list of directories that contain the git
+directories and magit will search for git repositories in those directories
+and offer them as choices when you do <!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted -->
+<code>magit-status</code>.</p>
+<p>Setting <code>magit-repo-dirs</code> definitely is huge improvement over the previous two
+methods. As a bonus if you happen to use <a href="http://github.com/bbatsov/projectile">projectile</a> like I do, you can also
+use the fact that projectile remembers your past projects to set
+<code>magit-repo-dirs</code> to all the git repositories that you have visited. I have
+the following piece of elisp in my init file to do this.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(eval-after-load <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">projectile</span><span style="color:#e6db74">&#34;</span>
+  <span style="color:#f92672">&#39;</span>(progn (setq magit-repo-dirs (<span style="color:#a6e22e">mapcar</span> (lambda (dir)
+                                          (<span style="color:#a6e22e">substring</span> dir <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">-1</span>))
+                                        (remove-if-not (lambda (project)
+                                                         (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/.git/</span><span style="color:#e6db74">&#34;</span>)))
+                                                       (projectile-relevant-known-projects)))
+
+                magit-repo-dirs-depth <span style="color:#ae81ff">1</span>)))
+</code></pre></div><p>The code above filters non-git directories from the projects known to
+<code>projectile</code> and sets them to magit-repo-dirs. It also sets magit-repo-dirs to 1
+so that magit searches only the top level directories. Now whenever I do
+<!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code> it prompts me with the name of all
+the git repositories on my PC, that I have visited atleast once. Finally if for
+some reason you want to manually enter the path to git repository you can do
+<!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code>.</p>
+<h2 id="update">Update</h2>
+<p>As of Magit v2.1, the variable <code>magit-repo-dirs</code> has been renamed to
+<code>magit-repo-directories</code> and <code>magit-repo-dirs-depth</code> has been renamed to
+<code>magit-repository-directories-depth</code>, so the above would not work. Use the
+following instead</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(eval-after-load <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">projectile</span><span style="color:#e6db74">&#34;</span>
+  <span style="color:#f92672">&#39;</span>(setq magit-repository-directories (<span style="color:#a6e22e">mapcar</span> <span style="color:#a6e22e">#&#39;</span><span style="color:#a6e22e">directory-file-name</span>
+                                              (cl-remove-if-not (lambda (project)
+                                                                  (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/.git/</span><span style="color:#e6db74">&#34;</span>)))
+                                                                (projectile-relevant-known-projects)))
+
+         magit-repository-directories-depth <span style="color:#ae81ff">1</span>))
+</code></pre></div>
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        
+        <li>
+            <a href="http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/">Automatically create parent directories on visiting a new file in Emacs <i class="fa fa-chevron-circle-right"></i> </a>
+        </li>
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments"></i> </button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'iqbalansari';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6> |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="http://iqbalansari.meindex.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+

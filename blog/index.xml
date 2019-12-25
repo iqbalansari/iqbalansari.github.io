@@ -1,0 +1,108 @@
+
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+ <channel>
+   <title>Blogs on Iqbal Ansari</title>
+   <link>http://iqbalansari.me/blog/</link>
+   <description>Recent content in Blogs on Iqbal Ansari</description>
+   <generator>Hugo -- gohugo.io</generator>
+   <language>en-us</language>
+   <lastBuildDate>Sun, 07 Dec 2014 12:59:00 +0530</lastBuildDate>
+   
+       <atom:link href="http://iqbalansari.me/blog/index.xml" rel="self" type="application/rss+xml" />
+   
+   
+     <item>
+       <title>Automatically create parent directories on visiting a new file in Emacs</title>
+       <link>http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</link>
+       <pubDate>Sun, 07 Dec 2014 12:59:00 +0530</pubDate>
+       
+       <guid>http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</guid>
+       <description>&lt;p&gt;In emacs we can open a file in a non-existent directory and then use the
+command &lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt; &lt;code&gt;make-directory&lt;/code&gt; to create the parent directory (or
+directories) if they do not exist. While this is really useful, I find it a
+bit cumbersome to press
+&lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt; &lt;code&gt;make-directory&lt;/code&gt; &lt;!-- raw HTML omitted --&gt;RET&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;RET&lt;!-- raw HTML omitted --&gt; every time I visit
+such a file. I was looking for ways to automate this when I came across the
+variable &lt;code&gt;find-file-not-found-functions&lt;/code&gt;. According to the documentation
+(&lt;!-- raw HTML omitted --&gt;C-h&lt;!-- raw HTML omitted --&gt;&lt;!-- raw HTML omitted --&gt;v&lt;!-- raw HTML omitted --&gt; &lt;code&gt;find-file-not-found-functions&lt;/code&gt; &lt;!-- raw HTML omitted --&gt;RET&lt;!-- raw HTML omitted --&gt;)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;List of functions to be called for `find-file&amp;rsquo; on nonexistent file.
+These functions are called as soon as the error is detected.
+Variable &amp;lsquo;buffer-file-name&amp;rsquo; is already set up.
+The functions are called in the order given until one of them returns non-nil.&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;I wrote a simple function which checks whether the parent directories exist
+for a given file and offers to create them if they do not exist.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;(defun my-create-non-existent-directory ()
+  (let ((parent-directory (&lt;span style=&#34;color:#a6e22e&#34;&gt;file-name-directory&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;buffer-file-name&lt;/span&gt;)))
+    (when (and (not (&lt;span style=&#34;color:#a6e22e&#34;&gt;file-exists-p&lt;/span&gt; parent-directory))
+               (y-or-n-p (&lt;span style=&#34;color:#a6e22e&#34;&gt;format&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;Directory &lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;`%s&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt; does not exist! Create it?&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt; parent-directory)))
+      (make-directory parent-directory &lt;span style=&#34;color:#66d9ef&#34;&gt;t&lt;/span&gt;))))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;I added this function to &lt;code&gt;find-file-not-found-functions&lt;/code&gt;&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;(add-to-list &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#39;find-file-not-found-functions&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;#&amp;#39;&lt;/span&gt;my-create-non-existent-directory)
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;So now whenever I visit a file a non existent directory emacs offers to create the parent directories.&lt;/p&gt;
+</description>
+     </item>
+   
+     <item>
+       <title>Switching repositories with Magit</title>
+       <link>http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</link>
+       <pubDate>Sat, 22 Feb 2014 21:49:00 +0530</pubDate>
+       
+       <guid>http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</guid>
+       <description>&lt;p&gt;&lt;a href=&#34;https://github.com/magit/magit&#34;&gt;Magit&lt;/a&gt; is an awesome git interface for emacs. The normal workflow with magit is
+to do &lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt; &lt;code&gt;magit-status&lt;/code&gt;, if the file you are editing is in a git
+repository you will have magit UI opened allowing you interact with the git
+repo. Otherwise it will ask you to enter the path to a git repository and
+opens a magit UI for that repository.&lt;/p&gt;
+&lt;p&gt;It often happens that you are editing a file in a some git repository but want
+to open the magit UI for some other git repository. You can of course open a
+file from the other repository and do &lt;code&gt;magit-status&lt;/code&gt;, but there should be a
+better way to do so. And as with most things in Emacs, there &lt;strong&gt;is&lt;/strong&gt; a better
+way. If you call &lt;code&gt;magit-status&lt;/code&gt; with a prefix argument, it will prompt you for
+path to the git repository you want to switch to and open a magit UI associated
+with that repository.&lt;/p&gt;
+&lt;p&gt;This is well and good but you still have to enter the path to repository, this
+little improvement over opening a file and then calling &lt;code&gt;magit-status&lt;/code&gt;. We can
+improve the this further by using the variable &lt;code&gt;magit-repo-dirs&lt;/code&gt;. Basically
+you can set this variable to a list of directories that contain the git
+directories and magit will search for git repositories in those directories
+and offer them as choices when you do &lt;!-- raw HTML omitted --&gt;C-u&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt;
+&lt;code&gt;magit-status&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Setting &lt;code&gt;magit-repo-dirs&lt;/code&gt; definitely is huge improvement over the previous two
+methods. As a bonus if you happen to use &lt;a href=&#34;http://github.com/bbatsov/projectile&#34;&gt;projectile&lt;/a&gt; like I do, you can also
+use the fact that projectile remembers your past projects to set
+&lt;code&gt;magit-repo-dirs&lt;/code&gt; to all the git repositories that you have visited. I have
+the following piece of elisp in my init file to do this.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;(eval-after-load &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;projectile&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#39;&lt;/span&gt;(progn (setq magit-repo-dirs (&lt;span style=&#34;color:#a6e22e&#34;&gt;mapcar&lt;/span&gt; (lambda (dir)
+                                          (&lt;span style=&#34;color:#a6e22e&#34;&gt;substring&lt;/span&gt; dir &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;-1&lt;/span&gt;))
+                                        (remove-if-not (lambda (project)
+                                                         (&lt;span style=&#34;color:#a6e22e&#34;&gt;file-directory-p&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;concat&lt;/span&gt; project &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/.git/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)))
+                                                       (projectile-relevant-known-projects)))
+
+                magit-repo-dirs-depth &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;The code above filters non-git directories from the projects known to
+&lt;code&gt;projectile&lt;/code&gt; and sets them to magit-repo-dirs. It also sets magit-repo-dirs to 1
+so that magit searches only the top level directories. Now whenever I do
+&lt;!-- raw HTML omitted --&gt;C-u&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt; &lt;code&gt;magit-status&lt;/code&gt; it prompts me with the name of all
+the git repositories on my PC, that I have visited atleast once. Finally if for
+some reason you want to manually enter the path to git repository you can do
+&lt;!-- raw HTML omitted --&gt;C-u&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;C-u&lt;!-- raw HTML omitted --&gt; &lt;!-- raw HTML omitted --&gt;M-x&lt;!-- raw HTML omitted --&gt; &lt;code&gt;magit-status&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id=&#34;update&#34;&gt;Update&lt;/h2&gt;
+&lt;p&gt;As of Magit v2.1, the variable &lt;code&gt;magit-repo-dirs&lt;/code&gt; has been renamed to
+&lt;code&gt;magit-repo-directories&lt;/code&gt; and &lt;code&gt;magit-repo-dirs-depth&lt;/code&gt; has been renamed to
+&lt;code&gt;magit-repository-directories-depth&lt;/code&gt;, so the above would not work. Use the
+following instead&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-elisp&#34; data-lang=&#34;elisp&#34;&gt;(eval-after-load &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;projectile&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;&amp;#39;&lt;/span&gt;(setq magit-repository-directories (&lt;span style=&#34;color:#a6e22e&#34;&gt;mapcar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;#&amp;#39;&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;directory-file-name&lt;/span&gt;
+                                              (cl-remove-if-not (lambda (project)
+                                                                  (&lt;span style=&#34;color:#a6e22e&#34;&gt;file-directory-p&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;concat&lt;/span&gt; project &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;/.git/&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&lt;/span&gt;)))
+                                                                (projectile-relevant-known-projects)))
+
+         magit-repository-directories-depth &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;))
+&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;</description>
+     </item>
+   
+ </channel>
+</rss>

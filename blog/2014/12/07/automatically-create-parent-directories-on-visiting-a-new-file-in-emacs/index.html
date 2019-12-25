@@ -1,0 +1,216 @@
+<!doctype html>
+
+<html lang="en-us">
+
+<head>
+  <title>Iqbal Ansari</title>
+  <meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta name="description" content="The HTML5 Herald" />
+<meta name="author" content="[Iqbal]" /><meta property="og:title" content="Automatically create parent directories on visiting a new file in Emacs" />
+<meta property="og:description" content="In emacs we can open a file in a non-existent directory and then use the command M-xmake-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/" />
+<meta property="article:published_time" content="2014-12-07T12:59:00+05:30" />
+<meta property="article:modified_time" content="2014-12-07T12:59:00+05:30" />
+
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Automatically create parent directories on visiting a new file in Emacs"/>
+<meta name="twitter:description" content="In emacs we can open a file in a non-existent directory and then use the command M-xmake-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)"/>
+
+<meta name="generator" content="Hugo 0.62.0" />
+    
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.0/normalize.min.css" />
+  <link rel="stylesheet" href="http://iqbalansari.me/fontawesome/css/all.min.css" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto+Slab|Ruda" />
+  <link rel="stylesheet" type="text/css" href="/css/styles.css" /></head>
+
+<body>
+  <div id="container">
+    <header>
+      <h1>
+                <a href="/">Iqbal Ansari</a>
+            </h1>
+
+      <ul id="social-media">
+             <li>
+               <a href="https://github.com/iqbalansari" title="GitHub">
+               <i class="fab fa-github fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://twitter.com/_iqbalansari" title="Twitter">
+               <i class="fab fa-twitter fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://linkedin.com/in/iqbalansari02" title="LinkedIn">
+               <i class="fab fa-linkedin fa-lg"></i>
+               </a>
+             </li>
+             <li>
+               <a href="https://stackoverflow.com/users/5285712/iqbal-ansari" title="StackOverflow">
+               <i class="fab fa-stack-overflow fa-lg"></i>
+               </a>
+             </li>
+      </ul>
+      
+      <p><em>My little corner on the Internet</em></p>
+      
+    </header>
+
+    
+<nav>
+    <ul>
+        
+    </ul>
+</nav>
+
+    <main>
+
+
+
+
+<article>
+
+    <h1>Automatically create parent directories on visiting a new file in Emacs</h1>
+
+    
+        <aside>
+    <ul>
+        <li>
+            <time class="post-date" datetime="2014-12-07T12:59:00&#43;05:30">Dec 7, 2014</time>
+        </li>
+        
+        <li>
+            Categories:
+            <em>
+                
+                    
+                    <a href="/categories/emacs">emacs</a>
+                
+            </em>
+        </li>
+        
+
+        
+
+        <li>One minute read</li>
+    </ul>
+</aside>
+
+    
+
+    <p>In emacs we can open a file in a non-existent directory and then use the
+command <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>make-directory</code> to create the parent directory (or
+directories) if they do not exist. While this is really useful, I find it a
+bit cumbersome to press
+<!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>make-directory</code> <!-- raw HTML omitted -->RET<!-- raw HTML omitted --><!-- raw HTML omitted -->RET<!-- raw HTML omitted --> every time I visit
+such a file. I was looking for ways to automate this when I came across the
+variable <code>find-file-not-found-functions</code>. According to the documentation
+(<!-- raw HTML omitted -->C-h<!-- raw HTML omitted --><!-- raw HTML omitted -->v<!-- raw HTML omitted --> <code>find-file-not-found-functions</code> <!-- raw HTML omitted -->RET<!-- raw HTML omitted -->)</p>
+<blockquote>
+<p>List of functions to be called for `find-file&rsquo; on nonexistent file.
+These functions are called as soon as the error is detected.
+Variable &lsquo;buffer-file-name&rsquo; is already set up.
+The functions are called in the order given until one of them returns non-nil.</p>
+</blockquote>
+<p>I wrote a simple function which checks whether the parent directories exist
+for a given file and offers to create them if they do not exist.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(defun my-create-non-existent-directory ()
+  (let ((parent-directory (<span style="color:#a6e22e">file-name-directory</span> <span style="color:#a6e22e">buffer-file-name</span>)))
+    (when (and (not (<span style="color:#a6e22e">file-exists-p</span> parent-directory))
+               (y-or-n-p (<span style="color:#a6e22e">format</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Directory </span><span style="color:#e6db74">`%s&#39;</span><span style="color:#e6db74"> does not exist! Create it?</span><span style="color:#e6db74">&#34;</span> parent-directory)))
+      (make-directory parent-directory <span style="color:#66d9ef">t</span>))))
+</code></pre></div><p>I added this function to <code>find-file-not-found-functions</code></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(add-to-list <span style="color:#e6db74">&#39;find-file-not-found-functions</span> <span style="color:#a6e22e">#&#39;</span>my-create-non-existent-directory)
+</code></pre></div><p>So now whenever I visit a file a non existent directory emacs offers to create the parent directories.</p>
+
+
+</article>
+
+
+<section class="post-nav">
+    <ul>
+        
+        <li>
+            <a href="http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/"><i class="fa fa-chevron-circle-left"></i> Switching repositories with Magit</a>
+        </li>
+        
+        
+    </ul>
+</section>
+    
+        <section class="comments-block">
+      <button id="show-comments" style="display: none;"><i class="fa fa-comments"></i> </button>
+</section>
+
+<section id="disqus_thread"></section>
+
+<script>
+      (function () {
+            
+            
+            if (window.location.hostname == "localhost")
+                  return;
+
+            var disqus_loaded = false;
+            var disqus_shortname = 'iqbalansari';
+            var disqus_button = document.getElementById("show-comments");
+
+            disqus_button.style.display = "";
+            disqus_button.addEventListener("click", disqus, false);
+
+            function disqus() {
+
+                  if (!disqus_loaded) {
+                        disqus_loaded = true;
+
+                        var e = document.createElement("script");
+                        e.type = "text/javascript";
+                        e.async = true;
+                        e.src = "//" + disqus_shortname + ".disqus.com/embed.js";
+                        (document.getElementsByTagName("head")[0] ||
+                              document.getElementsByTagName("body")[0])
+                        .appendChild(e);
+
+                        
+                        document.getElementById("show-comments").style.display = "none";
+                  }
+            }
+
+            
+            var hash = window.location.hash.substr(1);
+            if (hash.length > 8) {
+                  if (hash.substring(0, 8) == "comment-") {
+                        disqus();
+                  }
+            }
+
+            
+            if (/bot|google|baidu|bing|msn|duckduckgo|slurp|yandex/i.test(navigator.userAgent)) {
+                  disqus();
+            }
+      })();
+</script>
+
+    
+
+
+
+
+
+</main>
+    <footer>
+        <h6> |
+            Rendered by <a href="https://gohugo.io" title="Hugo">Hugo</a> |
+            <a href="http://iqbalansari.meindex.xml">Subscribe </a></h6>
+    </footer>
+</div>
+<script src="/js/scripts.js"></script>
+
+</body>
+
+</html>
+
