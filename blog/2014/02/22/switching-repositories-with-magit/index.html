@@ -108,7 +108,7 @@ It often happens that you are editing a file in a some git repository but want t
     
 
     <p><a href="https://github.com/magit/magit">Magit</a> is an awesome git interface for emacs. The normal workflow with magit is
-to do <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code>, if the file you are editing is in a git
+to do <!-- raw HTML omitted --><code>M-x</code><!-- raw HTML omitted --> <code>magit-status</code>, if the file you are editing is in a git
 repository you will have magit UI opened allowing you interact with the git
 repo. Otherwise it will ask you to enter the path to a git repository and
 opens a magit UI for that repository.</p>
@@ -124,38 +124,38 @@ little improvement over opening a file and then calling <code>magit-status</code
 improve the this further by using the variable <code>magit-repo-dirs</code>. Basically
 you can set this variable to a list of directories that contain the git
 directories and magit will search for git repositories in those directories
-and offer them as choices when you do <!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted -->
+and offer them as choices when you do <!-- raw HTML omitted --><code>C-u</code><!-- raw HTML omitted --> <!-- raw HTML omitted --><code>M-x</code><!-- raw HTML omitted -->
 <code>magit-status</code>.</p>
 <p>Setting <code>magit-repo-dirs</code> definitely is huge improvement over the previous two
 methods. As a bonus if you happen to use <a href="http://github.com/bbatsov/projectile">projectile</a> like I do, you can also
 use the fact that projectile remembers your past projects to set
 <code>magit-repo-dirs</code> to all the git repositories that you have visited. I have
 the following piece of elisp in my init file to do this.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(eval-after-load <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">projectile</span><span style="color:#e6db74">&#34;</span>
-  <span style="color:#f92672">&#39;</span>(progn (setq magit-repo-dirs (<span style="color:#a6e22e">mapcar</span> (lambda (dir)
-                                          (<span style="color:#a6e22e">substring</span> dir <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">-1</span>))
-                                        (remove-if-not (lambda (project)
-                                                         (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/.git/</span><span style="color:#e6db74">&#34;</span>)))
-                                                       (projectile-relevant-known-projects)))
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scheme" data-lang="scheme">(<span style="color:#a6e22e">eval-after-load</span> <span style="color:#e6db74">&#34;projectile&#34;</span>
+  <span style="color:#f92672">&#39;</span>(progn (<span style="color:#a6e22e">setq</span> magit-repo-dirs (<span style="color:#a6e22e">mapcar</span> (<span style="color:#66d9ef">lambda </span>(<span style="color:#a6e22e">dir</span>)
+                                          (substring dir <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">-1</span>))
+                                        (<span style="color:#a6e22e">remove-if-not</span> (<span style="color:#66d9ef">lambda </span>(<span style="color:#a6e22e">project</span>)
+                                                         (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;/.git/&#34;</span>)))
+                                                       (<span style="color:#a6e22e">projectile-relevant-known-projects</span>)))
 
                 magit-repo-dirs-depth <span style="color:#ae81ff">1</span>)))
 </code></pre></div><p>The code above filters non-git directories from the projects known to
 <code>projectile</code> and sets them to magit-repo-dirs. It also sets magit-repo-dirs to 1
 so that magit searches only the top level directories. Now whenever I do
-<!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code> it prompts me with the name of all
+<!-- raw HTML omitted --><code>C-u</code><!-- raw HTML omitted --> <!-- raw HTML omitted --><code>M-x</code><!-- raw HTML omitted --> <code>magit-status</code> it prompts me with the name of all
 the git repositories on my PC, that I have visited atleast once. Finally if for
-some reason you want to manually enter the path to git repository you can do
-<!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->C-u<!-- raw HTML omitted --> <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>magit-status</code>.</p>
+some reason you want to manually enter the path to git repository you can do <!-- raw HTML omitted --><code>C-u</code><!-- raw HTML omitted -->
+<!-- raw HTML omitted --><code>C-u</code><!-- raw HTML omitted --> <!-- raw HTML omitted --><code>M-x</code><!-- raw HTML omitted --> <code>magit-status</code>.</p>
 <h2 id="update">Update</h2>
 <p>As of Magit v2.1, the variable <code>magit-repo-dirs</code> has been renamed to
 <code>magit-repo-directories</code> and <code>magit-repo-dirs-depth</code> has been renamed to
 <code>magit-repository-directories-depth</code>, so the above would not work. Use the
 following instead</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(eval-after-load <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">projectile</span><span style="color:#e6db74">&#34;</span>
-  <span style="color:#f92672">&#39;</span>(setq magit-repository-directories (<span style="color:#a6e22e">mapcar</span> <span style="color:#a6e22e">#&#39;</span><span style="color:#a6e22e">directory-file-name</span>
-                                              (cl-remove-if-not (lambda (project)
-                                                                  (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">/.git/</span><span style="color:#e6db74">&#34;</span>)))
-                                                                (projectile-relevant-known-projects)))
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scheme" data-lang="scheme">(<span style="color:#a6e22e">eval-after-load</span> <span style="color:#e6db74">&#34;projectile&#34;</span>
+  <span style="color:#f92672">&#39;</span>(setq magit-repository-directories (<span style="color:#a6e22e">mapcar</span> <span style="color:#f92672">#</span><span style="color:#e6db74">&#39;directory-file-name</span>
+                                              (<span style="color:#a6e22e">cl-remove-if-not</span> (<span style="color:#66d9ef">lambda </span>(<span style="color:#a6e22e">project</span>)
+                                                                  (<span style="color:#a6e22e">file-directory-p</span> (<span style="color:#a6e22e">concat</span> project <span style="color:#e6db74">&#34;/.git/&#34;</span>)))
+                                                                (<span style="color:#a6e22e">projectile-relevant-known-projects</span>)))
 
          magit-repository-directories-depth <span style="color:#ae81ff">1</span>))
 </code></pre></div>

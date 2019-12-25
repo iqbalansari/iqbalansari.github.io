@@ -8,7 +8,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <meta name="description" content="The HTML5 Herald" />
 <meta name="author" content="[Iqbal]" /><meta property="og:title" content="Automatically create parent directories on visiting a new file in Emacs" />
-<meta property="og:description" content="In emacs we can open a file in a non-existent directory and then use the command M-xmake-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)" />
+<meta property="og:description" content="In emacs we can open a file in a non-existent directory and then use the command make-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/" />
 <meta property="article:published_time" content="2014-12-07T12:59:00+05:30" />
@@ -16,7 +16,7 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Automatically create parent directories on visiting a new file in Emacs"/>
-<meta name="twitter:description" content="In emacs we can open a file in a non-existent directory and then use the command M-xmake-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)"/>
+<meta name="twitter:description" content="In emacs we can open a file in a non-existent directory and then use the command make-directory to create the parent directory (or directories) if they do not exist. While this is really useful, I find it a bit cumbersome to press M-xmake-directory RETRETevery time I visit such a file. I was looking for ways to automate this when I came across the variable find-file-not-found-functions. According to the documentation (C-hvfind-file-not-found-functions RET)"/>
 
 <meta name="generator" content="Hugo 0.62.0" />
     
@@ -103,13 +103,13 @@
     
 
     <p>In emacs we can open a file in a non-existent directory and then use the
-command <!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>make-directory</code> to create the parent directory (or
-directories) if they do not exist. While this is really useful, I find it a
-bit cumbersome to press
-<!-- raw HTML omitted -->M-x<!-- raw HTML omitted --> <code>make-directory</code> <!-- raw HTML omitted -->RET<!-- raw HTML omitted --><!-- raw HTML omitted -->RET<!-- raw HTML omitted --> every time I visit
-such a file. I was looking for ways to automate this when I came across the
-variable <code>find-file-not-found-functions</code>. According to the documentation
-(<!-- raw HTML omitted -->C-h<!-- raw HTML omitted --><!-- raw HTML omitted -->v<!-- raw HTML omitted --> <code>find-file-not-found-functions</code> <!-- raw HTML omitted -->RET<!-- raw HTML omitted -->)</p>
+command <code>make-directory</code> to create the parent directory (or directories) if
+they do not exist. While this is really useful, I find it a bit cumbersome to
+press <!-- raw HTML omitted --><code>M-x</code><!-- raw HTML omitted --> <code>make-directory</code> <!-- raw HTML omitted --><code>RET</code><!-- raw HTML omitted --> <!-- raw HTML omitted --><code>RET</code><!-- raw HTML omitted --> every time
+I visit such a file. I was looking for ways to automate this when I came
+across the variable <code>find-file-not-found-functions</code>. According to the
+documentation (<!-- raw HTML omitted --><code>C-h</code><!-- raw HTML omitted --> <!-- raw HTML omitted --><code>v</code><!-- raw HTML omitted --> <code>find-file-not-found-functions</code>
+<!-- raw HTML omitted --><code>RET</code><!-- raw HTML omitted -->)</p>
 <blockquote>
 <p>List of functions to be called for `find-file&rsquo; on nonexistent file.
 These functions are called as soon as the error is detected.
@@ -118,13 +118,13 @@ The functions are called in the order given until one of them returns non-nil.</
 </blockquote>
 <p>I wrote a simple function which checks whether the parent directories exist
 for a given file and offers to create them if they do not exist.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(defun my-create-non-existent-directory ()
-  (let ((parent-directory (<span style="color:#a6e22e">file-name-directory</span> <span style="color:#a6e22e">buffer-file-name</span>)))
-    (when (and (not (<span style="color:#a6e22e">file-exists-p</span> parent-directory))
-               (y-or-n-p (<span style="color:#a6e22e">format</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">Directory </span><span style="color:#e6db74">`%s&#39;</span><span style="color:#e6db74"> does not exist! Create it?</span><span style="color:#e6db74">&#34;</span> parent-directory)))
-      (make-directory parent-directory <span style="color:#66d9ef">t</span>))))
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scheme" data-lang="scheme">(<span style="color:#a6e22e">defun</span> my-create-non-existent-directory ()
+  (<span style="color:#66d9ef">let </span>((<span style="color:#a6e22e">parent-directory</span> (<span style="color:#a6e22e">file-name-directory</span> buffer-file-name)))
+    (<span style="color:#a6e22e">when</span> (<span style="color:#66d9ef">and </span>(not (<span style="color:#a6e22e">file-exists-p</span> parent-directory))
+               (<span style="color:#a6e22e">y-or-n-p</span> (<span style="color:#a6e22e">format</span> <span style="color:#e6db74">&#34;Directory `%s&#39; does not exist! Create it?&#34;</span> parent-directory)))
+      (<span style="color:#a6e22e">make-directory</span> parent-directory t))))
 </code></pre></div><p>I added this function to <code>find-file-not-found-functions</code></p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-elisp" data-lang="elisp">(add-to-list <span style="color:#e6db74">&#39;find-file-not-found-functions</span> <span style="color:#a6e22e">#&#39;</span>my-create-non-existent-directory)
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scheme" data-lang="scheme">(<span style="color:#a6e22e">add-to-list</span> <span style="color:#e6db74">&#39;find-file-not-found-functions</span> <span style="color:#f92672">#</span><span style="color:#e6db74">&#39;my-create-non-existent-directory</span>)
 </code></pre></div><p>So now whenever I visit a file a non existent directory emacs offers to create the parent directories.</p>
 
 
