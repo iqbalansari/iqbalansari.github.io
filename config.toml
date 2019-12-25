@@ -1,0 +1,18 @@
+baseURL = "http://iqbalansari.me"
+languageCode = "en-us"
+title = "Iqbal Ansari"
+
+theme = "hugo-kiera"
+
+pygmentsCodeFences = true
+disqusShortname = "iqbalansari"
+
+[author]
+    name = "Iqbal Ansari"
+    github = "iqbalansari"
+    linkedin = "iqbalansari02"
+    twitter = "_iqbalansari"
+    stackoverflow = "users/5285712/iqbal-ansari"
+
+[params]
+    tagline = "My little corner on the Internet"
