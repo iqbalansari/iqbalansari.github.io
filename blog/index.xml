@@ -2,21 +2,21 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
  <channel>
    <title>Blogs on Iqbal Ansari</title>
-   <link>http://iqbalansari.me/blog/</link>
+   <link>https://iqbalansari.me/blog/</link>
    <description>Recent content in Blogs on Iqbal Ansari</description>
    <generator>Hugo -- gohugo.io</generator>
    <language>en-us</language>
    <lastBuildDate>Sun, 07 Dec 2014 12:59:00 +0530</lastBuildDate>
    
-       <atom:link href="http://iqbalansari.me/blog/index.xml" rel="self" type="application/rss+xml" />
+       <atom:link href="https://iqbalansari.me/blog/index.xml" rel="self" type="application/rss+xml" />
    
    
      <item>
        <title>Automatically create parent directories on visiting a new file in Emacs</title>
-       <link>http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</link>
+       <link>https://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</link>
        <pubDate>Sun, 07 Dec 2014 12:59:00 +0530</pubDate>
        
-       <guid>http://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</guid>
+       <guid>https://iqbalansari.me/blog/2014/12/07/automatically-create-parent-directories-on-visiting-a-new-file-in-emacs/</guid>
        <description>&lt;p&gt;In emacs we can open a file in a non-existent directory and then use the
 command &lt;code&gt;make-directory&lt;/code&gt; to create the parent directory (or directories) if
 they do not exist. While this is really useful, I find it a bit cumbersome to
@@ -46,10 +46,10 @@ for a given file and offers to create them if they do not exist.&lt;/p&gt;
    
      <item>
        <title>Switching repositories with Magit</title>
-       <link>http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</link>
+       <link>https://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</link>
        <pubDate>Sat, 22 Feb 2014 21:49:00 +0530</pubDate>
        
-       <guid>http://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</guid>
+       <guid>https://iqbalansari.me/blog/2014/02/22/switching-repositories-with-magit/</guid>
        <description>&lt;p&gt;&lt;a href=&#34;https://github.com/magit/magit&#34;&gt;Magit&lt;/a&gt; is an awesome git interface for emacs. The normal workflow with magit is
 to do &lt;!-- raw HTML omitted --&gt;&lt;code&gt;M-x&lt;/code&gt;&lt;!-- raw HTML omitted --&gt; &lt;code&gt;magit-status&lt;/code&gt;, if the file you are editing is in a git
 repository you will have magit UI opened allowing you interact with the git
